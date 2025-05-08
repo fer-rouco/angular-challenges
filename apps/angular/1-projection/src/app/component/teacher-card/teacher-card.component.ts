@@ -18,11 +18,10 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
       </div>
       <div class="card-list">
         @for (item of teachers(); track item) {
-          <app-list-item [name]="item.firstName">
-            <button (click)="delete(item.id)">
-              <img class="h-5" src="assets/svg/trash.svg" />
-            </button>
-          </app-list-item>
+          <app-list-item
+            [id]="item.id"
+            [name]="item.firstName"
+            (delete)="delete($event)"></app-list-item>
         }
       </div>
       <div class="card-button">

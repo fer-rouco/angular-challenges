@@ -23,11 +23,10 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
       </div>
       <div class="card-list">
         @for (item of cities(); track item) {
-          <app-list-item [name]="item.name">
-            <button (click)="delete(item.id)">
-              <img class="h-5" src="assets/svg/trash.svg" />
-            </button>
-          </app-list-item>
+          <app-list-item
+            [id]="item.id"
+            [name]="item.name"
+            (delete)="delete($event)"></app-list-item>
         }
       </div>
       <div class="card-button">
