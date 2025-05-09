@@ -2,7 +2,9 @@ import { TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Input,
+  input,
+  InputSignal,
+  InputSignalWithTransform,
   OnChanges,
 } from '@angular/core';
 
@@ -26,15 +28,21 @@ const ageToCategory = (age: number): Category => {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnChanges {
-  @Input({ required: true }) name!: string;
-  @Input() lastName?: string;
-  @Input() age?: string;
+  name: InputSignal<string> = input.required<string>();
+  lastName: InputSignal<string | undefined> = input<string>();
+  age: InputSignalWithTransform<number, string | number> = input(0, {
+    transform: (value: number | string): number => {
+      const num: number =
+        typeof value === 'string' ? Number.parseInt(value) : value;
+      return isNaN(num) ? 0 : num;
+    },
+  });
 
   fullName = '';
   category: Category = 'Junior';
 
   ngOnChanges(): void {
-    this.fullName = `${this.name} ${this.lastName ?? ''}`;
-    this.category = ageToCategory(Number(this.age) ?? 0);
+    this.fullName = `${this.name()} ${this.lastName() ?? ''}`;
+    this.category = ageToCategory(Number(this.age()) ?? 0);
   }
 }
